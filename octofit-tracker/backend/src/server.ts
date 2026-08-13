@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import { apiBaseUrl, apiPort } from './config/api.js';
 import './config/database.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { apiRouter } from './routes/api.js';
 
 const app = express();
-const port = Number(process.env.PORT) || 8000;
 const frontendOrigin = process.env.CODESPACE_NAME
   ? `https://${process.env.CODESPACE_NAME}-5173.app.github.dev`
   : 'http://localhost:5173';
@@ -21,6 +21,6 @@ app.get('/api/health', (_request, response) => {
 
 app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`OctoFit Tracker API listening on port ${port}`);
+app.listen(apiPort, () => {
+  console.log(`OctoFit Tracker API listening at ${apiBaseUrl}`);
 });
