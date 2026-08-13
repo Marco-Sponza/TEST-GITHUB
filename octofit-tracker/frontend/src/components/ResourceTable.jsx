@@ -7,14 +7,14 @@ function displayValue(value) {
   return String(value);
 }
 
-export default function ResourceTable({ resource, title, description, columns }) {
+export default function ResourceTable({ resource, endpoint, title, description, columns }) {
   const [records, setRecords] = useState([]);
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState('');
 
   useEffect(() => {
     let active = true;
-    fetchRecords(resource)
+    fetchRecords(resource, endpoint)
       .then((items) => {
         if (active) {
           setRecords(items);
@@ -30,7 +30,7 @@ export default function ResourceTable({ resource, title, description, columns })
     return () => {
       active = false;
     };
-  }, [resource]);
+  }, [endpoint, resource]);
 
   return (
     <section className="resource-page">
