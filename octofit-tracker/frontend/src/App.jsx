@@ -1,122 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Link, NavLink, Route, Routes } from 'react-router-dom';
+import Activities from './components/Activities';
+import Leaderboard from './components/Leaderboard';
+import Teams from './components/Teams';
+import Users from './components/Users';
+import Workouts from './components/Workouts';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const navigation = [
+  { to: '/activities', label: 'Activities' },
+  { to: '/workouts', label: 'Workouts' },
+  { to: '/teams', label: 'Teams' },
+  { to: '/leaderboard', label: 'Leaderboard' },
+  { to: '/users', label: 'Users' },
+];
 
+function Dashboard() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <main className="dashboard">
+      <section className="dashboard-hero">
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+          <p className="eyebrow">The everyday fitness companion</p>
+          <h1>Small steps.<br /><em>Strong momentum.</em></h1>
+          <p className="hero-copy">Track what you do, find your people, and make your next session feel possible.</p>
+          <Link className="primary-action" to="/activities">Log your progress <span aria-hidden="true">-&gt;</span></Link>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="hero-stamp" aria-label="OctoFit Tracker mark">
+          <img src="/octofitapp-small.png" alt="" />
+          <span>MOVE<br />TOGETHER</span>
         </div>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <section className="dashboard-grid" aria-label="Tracker sections">
+        {navigation.slice(0, 4).map((item, index) => (
+          <Link className={`feature-tile tile-${index + 1}`} to={item.to} key={item.to}>
+            <span className="tile-number">0{index + 1}</span>
+            <strong>{item.label}</strong>
+            <span className="tile-arrow" aria-hidden="true">-&gt;</span>
+          </Link>
+        ))}
+      </section>
+    </main>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="app-shell">
+        <header className="topbar">
+          <Link className="brand" to="/">
+            <img src="/octofitapp-small.png" alt="" />
+            <span>OctoFit <b>Tracker</b></span>
+          </Link>
+          <nav className="main-nav" aria-label="Primary navigation">
+            {navigation.map((item) => (
+              <NavLink className={({ isActive }) => (isActive ? 'active' : '')} to={item.to} key={item.to}>{item.label}</NavLink>
+            ))}
+          </nav>
+        </header>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/workouts" element={<Workouts />} />
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="*" element={<Dashboard />} />
+        </Routes>
+        <footer className="site-footer"><span>OCTOFIT TRACKER</span><span>Built for consistency, not perfection.</span></footer>
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
